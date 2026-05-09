@@ -9,14 +9,15 @@ struct CameraView: View {
                 Color.black.ignoresSafeArea()
 
                 VStack(spacing: 0) {
-                    Spacer(minLength: max(geometry.safeAreaInsets.top, 12))
-
                     previewArea
-                        .aspectRatio(3 / 4, contentMode: .fit)
                         .frame(maxWidth: .infinity)
-
-                    Spacer(minLength: 0)
-                        .frame(maxHeight: 14)
+                        .frame(
+                            height: max(
+                                geometry.size.height - geometry.safeAreaInsets.top - 96,
+                                0
+                            )
+                        )
+                        .padding(.top, geometry.safeAreaInsets.top)
 
                     controls
                 }
@@ -75,7 +76,7 @@ struct CameraView: View {
 
             Spacer()
         }
-        .frame(height: 106)
+        .frame(height: 96)
         .frame(maxWidth: .infinity)
         .background(Color.black)
         .overlay(alignment: .top) {
