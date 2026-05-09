@@ -43,11 +43,14 @@ struct CameraView: View {
             } label: {
                 ZStack {
                     Circle()
-                        .stroke(Color.white, lineWidth: 4)
-                        .frame(width: 78, height: 78)
+                        .fill(.black.opacity(0.18))
+                        .frame(width: 66, height: 66)
                     Circle()
-                        .fill(Color.white)
-                        .frame(width: 62, height: 62)
+                        .stroke(.white.opacity(0.95), lineWidth: 3)
+                        .frame(width: 58, height: 58)
+                    Circle()
+                        .fill(.white)
+                        .frame(width: 46, height: 46)
                 }
             }
             .disabled(!viewModel.canCapturePhoto)
