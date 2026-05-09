@@ -24,7 +24,6 @@ struct CameraView: View {
                 Spacer()
                 controls
             }
-            .padding(.bottom, 10)
         }
         .task {
             await viewModel.prepareCamera()
@@ -44,13 +43,13 @@ struct CameraView: View {
                 ZStack {
                     Circle()
                         .fill(.black.opacity(0.18))
-                        .frame(width: 66, height: 66)
+                        .frame(width: 62, height: 62)
                     Circle()
                         .stroke(.white.opacity(0.95), lineWidth: 3)
-                        .frame(width: 58, height: 58)
+                        .frame(width: 54, height: 54)
                     Circle()
                         .fill(.white)
-                        .frame(width: 46, height: 46)
+                        .frame(width: 42, height: 42)
                 }
             }
             .disabled(!viewModel.canCapturePhoto)
@@ -59,6 +58,9 @@ struct CameraView: View {
 
             Spacer()
         }
+        .frame(height: 118)
+        .frame(maxWidth: .infinity)
+        .background(Color.black)
         .overlay(alignment: .top) {
             if let message = viewModel.statusMessage {
                 Text(message)
@@ -67,7 +69,7 @@ struct CameraView: View {
                     .padding(.horizontal, 14)
                     .padding(.vertical, 8)
                     .background(.black.opacity(0.55), in: Capsule())
-                    .offset(y: -54)
+                    .offset(y: -42)
             }
         }
     }
