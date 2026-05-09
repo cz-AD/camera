@@ -10,7 +10,7 @@ struct CameraView: View {
                     .frame(height: 0)
 
                 topBar
-                    .frame(height: 188)
+                    .frame(height: 116)
                     .padding(.top, geometry.safeAreaInsets.top)
 
                 previewArea
@@ -36,7 +36,7 @@ struct CameraView: View {
     }
 
     private var topBar: some View {
-        VStack(spacing: 18) {
+        VStack(spacing: 12) {
             HStack {
                 VStack(alignment: .leading, spacing: 8) {
                     levelRow(label: "L")
@@ -45,32 +45,32 @@ struct CameraView: View {
 
                 Spacer()
 
-                HStack(spacing: 34) {
+                HStack(spacing: 20) {
                     Text("Log")
                         .foregroundStyle(.white.opacity(0.22))
-                    Text("Photo")
+                    Text("照片")
                         .foregroundStyle(.white)
-                    Text("Video")
+                    Text("视频")
                         .foregroundStyle(.white.opacity(0.38))
                 }
-                .font(.headline.weight(.semibold))
+                .font(.subheadline.weight(.semibold))
 
                 Spacer()
 
-                HStack(spacing: 24) {
+                HStack(spacing: 16) {
                     Image(systemName: "bolt.slash")
                     Image(systemName: "circle.circle")
                     Image(systemName: "circle.grid.3x3.fill")
                 }
-                .font(.title3.weight(.semibold))
+                .font(.body.weight(.semibold))
                 .foregroundStyle(.white)
             }
 
-            Text("How to choose the three camera modes")
-                .font(.subheadline.weight(.semibold))
+            Text("如何选择相机模式")
+                .font(.caption.weight(.semibold))
                 .foregroundStyle(.black)
-                .padding(.horizontal, 24)
-                .padding(.vertical, 10)
+                .padding(.horizontal, 18)
+                .padding(.vertical, 8)
                 .background(Color(red: 1.0, green: 0.82, blue: 0.26), in: RoundedRectangle(cornerRadius: 9))
                 .overlay(alignment: .top) {
                     Triangle()
@@ -79,8 +79,8 @@ struct CameraView: View {
                         .offset(y: -10)
                 }
         }
-        .padding(.horizontal, 24)
-        .padding(.top, 18)
+        .padding(.horizontal, 20)
+        .padding(.top, 12)
     }
 
     private func levelRow(label: String) -> some View {
@@ -89,10 +89,10 @@ struct CameraView: View {
                 .font(.caption.weight(.bold))
                 .foregroundStyle(.white.opacity(0.5))
 
-            ForEach(0..<10, id: \.self) { index in
+            ForEach(0..<8, id: \.self) { index in
                 Circle()
                     .fill(index < 4 ? Color.green : index == 4 ? Color.orange : Color.white.opacity(0.22))
-                    .frame(width: 8, height: 8)
+                    .frame(width: 7, height: 7)
             }
         }
     }
@@ -117,7 +117,7 @@ struct CameraView: View {
     }
 
     private var lensSelector: some View {
-        HStack(spacing: 18) {
+        HStack(spacing: 12) {
             lensOption(title: "13", unit: "mm", isSelected: false)
             lensOption(title: "24    48", unit: "mm      mm", isSelected: true)
             lensOption(title: "120", unit: "mm", isSelected: false)
@@ -127,49 +127,52 @@ struct CameraView: View {
     private func lensOption(title: String, unit: String, isSelected: Bool) -> some View {
         VStack(spacing: 1) {
             Image(systemName: isSelected ? "rectangle.split.3x1.fill" : "rectangle.split.3x1")
-                .font(.title3)
+                .font(.body)
             Text(title)
-                .font(.title3.weight(.bold))
+                .font(.headline.weight(.bold))
             Text(unit)
                 .font(.caption.weight(.semibold))
         }
         .foregroundStyle(isSelected ? Color.mint : .white.opacity(0.86))
-        .frame(width: isSelected ? 112 : 76, height: 68)
-        .background(.black.opacity(0.46), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .frame(width: isSelected ? 100 : 68, height: 58)
+        .background(.black.opacity(0.5), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
         .overlay {
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
+            RoundedRectangle(cornerRadius: 18, style: .continuous)
                 .stroke(.white.opacity(0.12), lineWidth: 1)
         }
     }
 
     private var bottomControls: some View {
-        VStack(spacing: 22) {
+        VStack(spacing: 12) {
             toolRow
             shutterRow
         }
-        .padding(.top, 28)
-        .padding(.bottom, 26)
+        .padding(.top, 14)
+        .padding(.bottom, 10)
         .background(Color.black)
     }
 
     private var toolRow: some View {
-        HStack {
-            toolItem(icon: "arrow.triangle.2.circlepath", title: "Front")
-            toolItem(icon: "viewfinder.circle", title: "Focus", marker: "A")
-            toolItem(icon: "circle.lefthalf.filled", title: "WB", marker: "A")
-            toolItem(icon: "textformat.size", title: "ISO", marker: "A")
-            toolItem(icon: "camera.aperture", title: "Shutter", marker: "A")
-            toolItem(icon: "plusminus.circle", title: "EV")
-            toolItem(icon: "gearshape", title: "Settings")
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 18) {
+                toolItem(icon: "arrow.triangle.2.circlepath", title: "前置")
+                toolItem(icon: "viewfinder.circle", title: "对焦", marker: "A")
+                toolItem(icon: "circle.lefthalf.filled", title: "白平衡", marker: "A")
+                toolItem(icon: "textformat.size", title: "ISO", marker: "A")
+                toolItem(icon: "camera.aperture", title: "快门", marker: "A")
+                toolItem(icon: "plusminus.circle", title: "补偿")
+                toolItem(icon: "gearshape", title: "设置")
+            }
+            .padding(.horizontal, 22)
         }
-        .padding(.horizontal, 24)
+        .frame(height: 54)
     }
 
     private func toolItem(icon: String, title: String, marker: String? = nil) -> some View {
         VStack(spacing: 8) {
             ZStack(alignment: .bottomTrailing) {
                 Image(systemName: icon)
-                    .font(.system(size: 27, weight: .semibold))
+                    .font(.system(size: 24, weight: .semibold))
 
                 if let marker {
                     Text(marker)
@@ -182,14 +185,14 @@ struct CameraView: View {
                 .font(.caption.weight(.semibold))
         }
         .foregroundStyle(.white)
-        .frame(maxWidth: .infinity)
+        .frame(width: 58)
     }
 
     private var shutterRow: some View {
         HStack {
             RoundedRectangle(cornerRadius: 14, style: .continuous)
                 .fill(.white.opacity(0.95))
-                .frame(width: 68, height: 68)
+                .frame(width: 58, height: 58)
                 .overlay {
                     Image(systemName: "photo")
                         .foregroundStyle(.black.opacity(0.7))
@@ -201,10 +204,10 @@ struct CameraView: View {
                 ZStack {
                     Circle()
                         .stroke(.white, lineWidth: 5)
-                        .frame(width: 80, height: 80)
+                        .frame(width: 72, height: 72)
                     Circle()
                         .fill(.white)
-                        .frame(width: 64, height: 64)
+                        .frame(width: 56, height: 56)
                 }
             }
             .disabled(!viewModel.canCapturePhoto)
@@ -219,7 +222,7 @@ struct CameraView: View {
                         endPoint: .bottomTrailing
                     )
                 )
-                .frame(width: 68, height: 68)
+                .frame(width: 58, height: 58)
                 .overlay {
                     RoundedRectangle(cornerRadius: 10, style: .continuous)
                         .fill(.white.opacity(0.9))
