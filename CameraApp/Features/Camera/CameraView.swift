@@ -4,24 +4,6 @@ struct CameraView: View {
     @StateObject private var viewModel = CameraViewModel()
 
     var body: some View {
-        VStack(spacing: 0) {
-            previewArea
-
-            controls
-                .frame(height: 126)
-                .frame(maxWidth: .infinity)
-                .background(Color.black)
-        }
-        .background(Color.black)
-        .task {
-            await viewModel.prepareCamera()
-        }
-        .onDisappear {
-            viewModel.stopCamera()
-        }
-    }
-
-    private var previewArea: some View {
         ZStack {
             Color.black.ignoresSafeArea()
 
@@ -37,9 +19,19 @@ struct CameraView: View {
             case .failed(let message):
                 errorView(message)
             }
+
+            VStack {
+                Spacer()
+                controls
+            }
+            .padding(.bottom, 10)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .clipped()
+        .task {
+            await viewModel.prepareCamera()
+        }
+        .onDisappear {
+            viewModel.stopCamera()
+        }
     }
 
     private var controls: some View {
@@ -67,7 +59,6 @@ struct CameraView: View {
 
             Spacer()
         }
-        .padding(.bottom, 14)
         .overlay(alignment: .top) {
             if let message = viewModel.statusMessage {
                 Text(message)
@@ -76,7 +67,7 @@ struct CameraView: View {
                     .padding(.horizontal, 14)
                     .padding(.vertical, 8)
                     .background(.black.opacity(0.55), in: Capsule())
-                    .offset(y: 10)
+                    .offset(y: -54)
             }
         }
     }
