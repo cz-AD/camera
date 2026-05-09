@@ -4,26 +4,24 @@ struct CameraView: View {
     @StateObject private var viewModel = CameraViewModel()
 
     var body: some View {
-        ZStack {
-            Color.black.ignoresSafeArea()
+        GeometryReader { geometry in
+            ZStack(alignment: .bottom) {
+                Color.black.ignoresSafeArea()
 
-            switch viewModel.state {
-            case .idle, .requestingPermission:
-                ProgressView()
-                    .tint(.white)
-            case .authorized:
-                CameraPreviewView(session: viewModel.session)
-                    .ignoresSafeArea()
-            case .denied:
-                permissionDeniedView
-            case .failed(let message):
-                errorView(message)
-            }
+                VStack(spacing: 0) {
+                    Spacer(minLength: max(geometry.safeAreaInsets.top, 12))
 
-            VStack {
-                Spacer()
-                controls
+                    previewArea
+                        .aspectRatio(3 / 4, contentMode: .fit)
+                        .frame(maxWidth: .infinity)
+
+                    Spacer(minLength: 0)
+                        .frame(maxHeight: 14)
+
+                    controls
+                }
             }
+            .ignoresSafeArea(edges: .bottom)
         }
         .task {
             await viewModel.prepareCamera()
@@ -31,6 +29,25 @@ struct CameraView: View {
         .onDisappear {
             viewModel.stopCamera()
         }
+    }
+
+    private var previewArea: some View {
+        ZStack {
+            Color.black
+
+            switch viewModel.state {
+            case .idle, .requestingPermission:
+                ProgressView()
+                    .tint(.white)
+            case .authorized:
+                CameraPreviewView(session: viewModel.session)
+            case .denied:
+                permissionDeniedView
+            case .failed(let message):
+                errorView(message)
+            }
+        }
+        .clipped()
     }
 
     private var controls: some View {
@@ -58,7 +75,7 @@ struct CameraView: View {
 
             Spacer()
         }
-        .frame(height: 118)
+        .frame(height: 106)
         .frame(maxWidth: .infinity)
         .background(Color.black)
         .overlay(alignment: .top) {
